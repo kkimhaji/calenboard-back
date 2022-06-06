@@ -46,10 +46,10 @@ const renderCalender = () => {
     $day.forEach((day)=>{
         day.addEventListener('click', function (){
             nowDate = day.innerText;
+            alert(day.innerText +" "+ (viewMonth+1));
             console.log(nowDate);
         })
     })
-
 
     const today = new Date();
     if (viewMonth === today.getMonth() && viewYear === today.getFullYear()) {
