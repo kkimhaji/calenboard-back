@@ -21,9 +21,9 @@ public class Board {
     @Column(nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
     private LocalDate date;
-    @ManyToOne(cascade = CascadeType.MERGE, targetEntity = User.class)
-    @Column(nullable = false)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private User user;
+    @Column(nullable = false)
     private String title;
 
     @Builder

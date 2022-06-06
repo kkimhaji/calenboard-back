@@ -1,4 +1,5 @@
-let date = new Date();
+let date = new Date(); //현재
+let nowDate;
 
 const renderCalender = () => {
     const viewYear = date.getFullYear();
@@ -41,6 +42,14 @@ const renderCalender = () => {
     });
 
     document.querySelector('.dates').innerHTML = dates.join('');
+    let $day = document.querySelectorAll('.date');
+    $day.forEach((day)=>{
+        day.addEventListener('click', function (){
+            nowDate = day.innerText;
+            console.log(nowDate);
+        })
+    })
+
 
     const today = new Date();
     if (viewMonth === today.getMonth() && viewYear === today.getFullYear()) {
@@ -70,7 +79,7 @@ const goToday = () => {
     renderCalender();
 };
 
-$day = document.querySelector('.date');
 
-$day.addEventListener(click);
+
+
 

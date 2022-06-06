@@ -7,6 +7,7 @@ import jejunu.portal.calenboard.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -26,11 +27,21 @@ public class BoardController {
         return boardService.update(boardDto);
     }
 
-    @GetMapping("/board/{id}")
-    public Optional<Board> getlist(@PathVariable Long bid){
+    @GetMapping("/board/getList")
+    public List<Board> getlist(){
+        return boardRepository.findAll();
+    }
+
+    @GetMapping("/board/{bid}")
+    public Optional<Board> get(@PathVariable Long bid){
         return boardRepository.findById(bid);
     }
 
 
+    @DeleteMapping("/delete/{bid}")
+    public Long delete(@PathVariable Long bid){
+        boardRepository.deleteById(bid);
+        return bid;
+    }
 
 }

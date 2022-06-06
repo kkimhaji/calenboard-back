@@ -23,12 +23,7 @@ public class BoardService {
         Long bid = requestDto.getBid();
         Board board = boardRepository.findById(bid)
                 .orElseThrow(()-> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
-
         return boardRepository.save(requestDto.toEntity()).getBid();
     }
-
-    public List<Board> getlist()
-
-
 
 }
