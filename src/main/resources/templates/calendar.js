@@ -69,3 +69,8 @@ const goToday = () => {
     date = new Date();
     renderCalender();
 };
+
+$day = document.querySelector('.date');
+
+$day.addEventListener(click);
+
