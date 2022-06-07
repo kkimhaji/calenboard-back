@@ -7,6 +7,7 @@ import jejunu.portal.calenboard.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +43,11 @@ public class BoardController {
     public Long delete(@PathVariable Long bid){
         boardRepository.deleteById(bid);
         return bid;
+    }
+
+    @GetMapping("/board")
+    public Optional<Board> getByDate(LocalDate date){
+        return boardService.findByDate(date);
     }
 
 }

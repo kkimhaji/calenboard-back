@@ -1,9 +1,16 @@
 let date = new Date(); //현재
 let nowDate;
+let ym = "";
 
 const renderCalender = () => {
     const viewYear = date.getFullYear();
     const viewMonth = date.getMonth();
+    let month = viewMonth.toString().padStart(2, '0');
+    // month.toString().length < 2 ? '0' + month : month;
+    console.log(month);
+    ym = viewYear+"-"+month+"-";
+
+    console.log(ym);
 
     document.querySelector('.year-month').textContent = `${viewYear}년 ${viewMonth + 1}월`;
 
@@ -45,11 +52,19 @@ const renderCalender = () => {
     let $day = document.querySelectorAll('.date');
     $day.forEach((day)=>{
         day.addEventListener('click', function (){
-            nowDate = day.innerText;
-            alert(day.innerText +" "+ (viewMonth+1));
-            console.log(nowDate);
+            nowDate = ym + day.innerText.padStart(2, '0');
+            $.ajax({
+                url: `board?date=${nowDate}`,
+                type: 'GET',
+                success: function (result){
+                    console.log(result);
+                },
+                error: function (jqXHR, textStatus, errorThrown){
+                    console.log(textStatus);
+                }
+            });
         })
-    })
+    });
 
     const today = new Date();
     if (viewMonth === today.getMonth() && viewYear === today.getFullYear()) {
