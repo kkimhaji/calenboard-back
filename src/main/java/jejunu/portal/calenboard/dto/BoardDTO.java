@@ -1,20 +1,18 @@
 package jejunu.portal.calenboard.dto;
 
 import jejunu.portal.calenboard.entity.Board;
-import jejunu.portal.calenboard.entity.User;
+import jejunu.portal.calenboard.entity.Member;
 import lombok.*;
 
-import java.lang.reflect.Member;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class BoardDto {
+public class BoardDTO {
     private Long bid;
-    private User user;
+    private Member member;
     private String title;
     private String content;
     private LocalDate date;
@@ -29,7 +27,7 @@ public class BoardDto {
 
     public Board toEntity(){
         return Board.builder()
-                .user(user).content(content)
+                .member(member).content(content)
                 .title(title).date(date).bid(bid).build();
     }
 

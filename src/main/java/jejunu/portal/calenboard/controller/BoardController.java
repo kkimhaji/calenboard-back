@@ -1,6 +1,6 @@
 package jejunu.portal.calenboard.controller;
 
-import jejunu.portal.calenboard.dto.BoardDto;
+import jejunu.portal.calenboard.dto.BoardDTO;
 import jejunu.portal.calenboard.entity.Board;
 import jejunu.portal.calenboard.repository.BoardRepository;
 import jejunu.portal.calenboard.service.BoardService;
@@ -19,12 +19,12 @@ public class BoardController {
     private final BoardRepository boardRepository;
 
     @PostMapping("/post")
-    public Long create(@RequestBody BoardDto requestDto){
+    public Long create(@RequestBody BoardDTO requestDto){
         return boardService.create(requestDto);
     }
 
     @PutMapping("/update")
-    public Long updateBoard(@RequestBody BoardDto boardDto){
+    public Long updateBoard(@RequestBody BoardDTO boardDto){
         return boardService.update(boardDto);
     }
 

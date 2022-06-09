@@ -7,10 +7,7 @@ const renderCalender = () => {
     const viewMonth = date.getMonth();
     let month = viewMonth.toString().padStart(2, '0');
     // month.toString().length < 2 ? '0' + month : month;
-    console.log(month);
     ym = viewYear+"-"+month+"-";
-
-    console.log(ym);
 
     document.querySelector('.year-month').textContent = `${viewYear}년 ${viewMonth + 1}월`;
 

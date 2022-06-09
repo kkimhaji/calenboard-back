@@ -5,7 +5,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Table(name = "board")
@@ -22,15 +21,15 @@ public class Board {
     @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
     private LocalDate date;
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    private User user;
+    private Member member;
     @Column(nullable = false)
     private String title;
 
     @Builder
-    public Board(String content, String title, User user, LocalDate date, Long bid){
+    public Board(String content, String title, Member member, LocalDate date, Long bid){
         this.content = content;
         this.title = title;
-        this.user = user;
+        this.member = member;
         this.date = date;
         this.bid= bid;
     }
