@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/board")
 public class BoardController {
 
     private final BoardService boardService;
@@ -31,13 +32,13 @@ public class BoardController {
     }
 
     @GetMapping("/board/getList")
-    public List<Board> getlist(){
-        return boardRepository.findAll();
+    public List<Board> getlist(HttpServletRequest request){
+        return boardService.getlistAll(request);
     }
 
-    @GetMapping("/board/{bid}")
+    @GetMapping("/{bid}")
     public Optional<Board> get(@PathVariable Long bid){
-        return boardRepository.findById(bid);
+        return boardService.get(bid);
     }
 
 
@@ -51,5 +52,6 @@ public class BoardController {
     public Board getByDate(@RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate date){
         return boardService.findByDate(date);
     }
+
 
 }

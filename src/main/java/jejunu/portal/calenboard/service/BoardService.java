@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.nio.channels.MembershipKey;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -38,5 +39,15 @@ public class BoardService {
         Optional<Board> optionalBoard = boardRepository.findById(bid);
         return optionalBoard.orElse(null);
     }
+
+    public Optional<Board> get(Long bid){
+        return boardRepository.findById(bid);
+    }
+
+    public List<Board> getlistAll(HttpServletRequest request){
+        Member loginM = memberService.getLoginUser(request);
+        return boardRepository.findAllByMember(loginM);
+    }
+
 
 }
