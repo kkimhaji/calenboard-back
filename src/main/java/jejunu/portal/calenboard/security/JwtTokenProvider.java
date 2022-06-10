@@ -2,6 +2,7 @@ package jejunu.portal.calenboard.security;
 
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Component
 public class JwtTokenProvider {
+    @Value("spring.jwt.secret")
     private String secretKey;
 
     private long tokenValidTime = 1000L * 60 * 60;

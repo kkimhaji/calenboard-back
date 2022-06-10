@@ -24,14 +24,12 @@ public class SignController {
 
     @PostMapping("/signin")
     public String signin(@RequestParam String email, @RequestParam String password) throws FailedLoginException {
-        Member member = memberRepository.findByEmail(email).orElseThrow(()->new UsernameNotFoundException("이메일을 다시 한 번 확인해주세요"));
-        if(!passwordEncoder.matches(password, member.getPassword())) throw new FailedLoginException("");
-        return jwtTokenProvider.createToken(String.valueOf(member.getUid()), member.getRoles());
+        return memberService.login(email, password);
     }
 
     @PostMapping("/signup")
-    public Long signup(@RequestParam String email, @RequestParam String password, @RequestParam String nickname){
-        return memberRepository.save(Member.builder().email(email).nickname(nickname).password(passwordEncoder.encode(password)).roles(Collections.singletonList("ROLE_USER")).build()).getUid();
+    public Member signup(@RequestParam String email, @RequestParam String password, @RequestParam String nickname){
+        return memberService.signup(email, password, nickname);
     }
 
 

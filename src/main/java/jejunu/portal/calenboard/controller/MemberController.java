@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,10 +20,21 @@ public class MemberController {
     private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/get")
-    public Member get(HttpServletRequest request) throws UserPrincipalNotFoundException {
-        Member loginMember = memberService.getLoginUser(request);
-        return memberRepository.findByEmail(loginMember.getEmail()).orElseThrow(()->new UserPrincipalNotFoundException("user not found"));
+    public Optional<Member> get(HttpServletRequest request) {
+        return memberService.get(request);
     }
+
+    @DeleteMapping("/delete")
+    public Long delete(HttpServletRequest request){
+        return memberService.delete(request);
+    }
+
+    @DeleteMapping("/delete/{uid}")
+    public Long deletebyUid(@PathVariable Long uid){
+        return memberService.deletebyUid(uid);
+    }
+
+
 
 
 }

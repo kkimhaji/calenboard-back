@@ -1,5 +1,6 @@
 package jejunu.portal.calenboard.security;
 
+import jejunu.portal.calenboard.service.CustomUserDetailsService;
 import jejunu.portal.calenboard.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -20,8 +21,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final MemberService memberService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final CustomUserDetailsService userService;
 
     @Bean
     PasswordEncoder passwordEncoder(){
@@ -52,8 +53,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(memberService)
-                .passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(userService)
+                .passwordEncoder(passwordEncoder());
     }
 
     @Override
