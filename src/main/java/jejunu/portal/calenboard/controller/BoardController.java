@@ -5,8 +5,10 @@ import jejunu.portal.calenboard.entity.Board;
 import jejunu.portal.calenboard.repository.BoardRepository;
 import jejunu.portal.calenboard.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -19,13 +21,13 @@ public class BoardController {
     private final BoardRepository boardRepository;
 
     @PostMapping("/post")
-    public Long create(@RequestBody BoardDTO requestDto){
-        return boardService.create(requestDto);
+    public Long create(@RequestBody BoardDTO requestDto, HttpServletRequest request){
+        return boardService.create(requestDto, request);
     }
 
     @PutMapping("/update")
-    public Long updateBoard(@RequestBody BoardDTO boardDto){
-        return boardService.update(boardDto);
+    public Long updateBoard(@RequestBody BoardDTO boardDto, HttpServletRequest request){
+        return boardService.update(boardDto, request);
     }
 
     @GetMapping("/board/getList")
@@ -46,7 +48,7 @@ public class BoardController {
     }
 
     @GetMapping("/board")
-    public Optional<Board> getByDate(LocalDate date){
+    public Board getByDate(@RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate date){
         return boardService.findByDate(date);
     }
 

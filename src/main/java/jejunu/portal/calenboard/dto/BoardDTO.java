@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class BoardDTO {
     private Long bid;
-    private Member member;
     private String title;
     private String content;
     private LocalDate date;
@@ -25,7 +24,7 @@ public class BoardDTO {
 //        this.date = date;
 //    }
 
-    public Board toEntity(){
+    public Board toEntity(Member member){
         return Board.builder()
                 .member(member).content(content)
                 .title(title).date(date).bid(bid).build();

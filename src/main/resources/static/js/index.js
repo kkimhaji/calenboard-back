@@ -53,6 +53,7 @@ const renderCalender = () => {
             $.ajax({
                 url: `board?date=${nowDate}`,
                 type: 'GET',
+                header:{"": ""},
                 success: function (result){
                     console.log(result);
                 },
