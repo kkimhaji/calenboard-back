@@ -5,6 +5,7 @@ import jejunu.portal.calenboard.repository.MemberRepository;
 import jejunu.portal.calenboard.security.JwtTokenProvider;
 import jejunu.portal.calenboard.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +29,7 @@ public class SignController {
     }
 
     @PostMapping("/signup")
-    public Member signup(@RequestParam String email, @RequestParam String password, @RequestParam String nickname){
-        System.out.println("signup@");
+    public Member signup(@RequestParam String email, @RequestParam String password, @RequestParam String nickname) throws Exception {
         return memberService.signup(email, password, nickname);
     }
 
