@@ -23,12 +23,13 @@ public class SignController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/signin")
-    public String signin(@RequestParam String email, @RequestParam String password) throws FailedLoginException {
+    public Optional<String> signin(@RequestParam String email, @RequestParam String password) throws FailedLoginException {
         return memberService.login(email, password);
     }
 
     @PostMapping("/signup")
     public Member signup(@RequestParam String email, @RequestParam String password, @RequestParam String nickname){
+        System.out.println("signup@");
         return memberService.signup(email, password, nickname);
     }
 
