@@ -1,6 +1,7 @@
 package jejunu.portal.calenboard.service;
 
 import jejunu.portal.calenboard.entity.Member;
+import jejunu.portal.calenboard.model.SingleResult;
 import jejunu.portal.calenboard.repository.MemberRepository;
 import jejunu.portal.calenboard.security.JwtTokenProvider;
 import lombok.AllArgsConstructor;
@@ -26,13 +27,14 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
+    private final ResponseService responseService;
 
-    public Optional<String> login(String email, String password) throws FailedLoginException {
+    public SingleResult<String> login(String email, String password) throws FailedLoginException {
         Member member = memberRepository.findByEmail(email).orElseThrow();
         if(!passwordEncoder.matches(password, member.getPassword())) throw new FailedLoginException("로그인 실패");
         String result = jwtTokenProvider.createToken(String.valueOf(member.getUid()), member.getRoles());
         SecurityContextHolder.clearContext();
-        return Optional.ofNullable(result);
+        return responseService.getSingleResult(result);
     }
 
     @Transactional //token을 기반으로 현재 로그인한 유저를 받아옴

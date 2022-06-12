@@ -1,6 +1,7 @@
 package jejunu.portal.calenboard.controller;
 
 import jejunu.portal.calenboard.entity.Member;
+import jejunu.portal.calenboard.model.SingleResult;
 import jejunu.portal.calenboard.repository.MemberRepository;
 import jejunu.portal.calenboard.security.JwtTokenProvider;
 import jejunu.portal.calenboard.service.MemberService;
@@ -24,7 +25,7 @@ public class SignController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/signin")
-    public Optional<String> signin(@RequestParam String email, @RequestParam String password) throws FailedLoginException {
+    public SingleResult<String> signin(@RequestParam String email, @RequestParam String password) throws FailedLoginException {
         return memberService.login(email, password);
     }
 

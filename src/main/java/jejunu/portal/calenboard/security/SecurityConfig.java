@@ -42,13 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
-                .headers()
-                .frameOptions().sameOrigin()
-                .httpStrictTransportSecurity().disable()
-            .and()
                 .httpBasic().disable()
                 .csrf().disable()
-                .formLogin().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
                 .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())
