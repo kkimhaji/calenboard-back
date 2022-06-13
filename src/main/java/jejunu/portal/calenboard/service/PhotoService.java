@@ -1,7 +1,6 @@
 package jejunu.portal.calenboard.service;
 
 import jejunu.portal.calenboard.dto.PhotoDTO;
-import jejunu.portal.calenboard.repository.PhotoRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,16 +17,15 @@ import java.util.UUID;
 
 @Service
 public class PhotoService {
-    private PhotoRepository photoRepository;
 
     @Value("${org.portal.upload.path}")
     private String uploadPath;
 
     public void uploadFile(MultipartFile[] uploadFiles, Long uid, String date){
         for(MultipartFile uploadFile: uploadFiles){
-//            if(!uploadFile.getContentType().startsWith("image")){
-//                break;
-//            }
+            if(!uploadFile.getContentType().startsWith("image")){
+                break;
+            }
 
             if(ObjectUtils.isEmpty(uploadFile.getContentType())) break;
 

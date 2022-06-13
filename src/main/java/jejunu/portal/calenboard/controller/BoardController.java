@@ -33,12 +33,12 @@ public class BoardController {
         return boardService.update(boardDto, request);
     }
 
-    @GetMapping("/board/getList")
+    @GetMapping("getList")
     public List<Board> getlist(HttpServletRequest request){
         return boardService.getlistAll(request);
     }
 
-    @GetMapping("/{bid}")
+    @GetMapping("get/{bid}")
     public Optional<Board> get(@PathVariable Long bid){
         return boardService.get(bid);
     }
@@ -50,18 +50,23 @@ public class BoardController {
         return bid;
     }
 
-    @GetMapping("/board")
-    public Board getByDate(@RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate date){
-        return boardService.findByDate(date);
+    @GetMapping("/getbydate")
+    public Optional<Board> getByDate(@RequestParam String nowDate, HttpServletRequest request){
+        return boardService.findByDate(nowDate, request);
     }
 
     @PostMapping("/upload")
-    public void uploadFile(MultipartFile[] uploadFiles){
+    public void uploadFile(@RequestParam MultipartFile[] uploadFiles){
         for (MultipartFile uploadFile: uploadFiles){
             String originName = uploadFile.getOriginalFilename();
             String fileName = originName.substring(originName.lastIndexOf("\\"+1));
             System.out.println("fileName: "+fileName);
         }
+    }
+
+    @GetMapping("/postexist")
+    public boolean ifexist(@RequestParam String nowDate, HttpServletRequest request){
+        return boardService.postexist(nowDate, request);
     }
 
 }

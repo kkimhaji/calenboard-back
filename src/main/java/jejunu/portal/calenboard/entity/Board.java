@@ -1,6 +1,7 @@
 package jejunu.portal.calenboard.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,6 +25,7 @@ public class Board {
 //    private LocalDate date;
     private String date;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private Member member;
     @Column(nullable = false)
     private String title;

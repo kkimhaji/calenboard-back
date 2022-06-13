@@ -3,21 +3,13 @@ package jejunu.portal.calenboard.service;
 import jejunu.portal.calenboard.dto.BoardDTO;
 import jejunu.portal.calenboard.entity.Board;
 import jejunu.portal.calenboard.entity.Member;
-import jejunu.portal.calenboard.entity.Photo;
-import jejunu.portal.calenboard.model.BoardAndPhotoVO;
-import jejunu.portal.calenboard.model.ImageUtils;
 import jejunu.portal.calenboard.repository.BoardRepository;
-import jejunu.portal.calenboard.repository.PhotoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
-import java.nio.channels.MembershipKey;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +18,6 @@ import java.util.Optional;
 public class BoardService {
     private final BoardRepository boardRepository;
     private final MemberService memberService;
-    private final PhotoRepository photoRepository;
     private final PhotoService photoService;
 
     @Transactional
@@ -44,10 +35,10 @@ public class BoardService {
         return boardRepository.save(boardDTO.toEntity(loginMem)).getBid();
     }
 
-    public Board findByDate(LocalDate date){
-        Long bid = boardRepository.findByDate(date).getBid();
-        Optional<Board> optionalBoard = boardRepository.findById(bid);
-        return optionalBoard.orElse(null);
+    public Optional<Board> findByDate(String nowDate, HttpServletRequest request){
+        Member loginM = memberService.getLoginUser(request);
+        Optional<Board> result = boardRepository.findByDateAndMember(nowDate,loginM);
+        return result;
     }
 
     public Optional<Board> get(Long bid){
@@ -57,6 +48,11 @@ public class BoardService {
     public List<Board> getlistAll(HttpServletRequest request){
         Member loginM = memberService.getLoginUser(request);
         return boardRepository.findAllByMember(loginM);
+    }
+
+    public boolean postexist(String nowDate, HttpServletRequest request){
+        Optional<Board> result = findByDate(nowDate, request);
+        return result.isPresent();
     }
 
 
