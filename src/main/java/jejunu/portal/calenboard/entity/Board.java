@@ -5,6 +5,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "board")
@@ -18,20 +20,23 @@ public class Board {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
     @Column(nullable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
-    private LocalDate date;
-    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+//    @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
+//    private LocalDate date;
+    private String date;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Member member;
     @Column(nullable = false)
     private String title;
 
+
     @Builder
-    public Board(String content, String title, Member member, LocalDate date, Long bid){
+    public Board(String content, String title, Member member, String date, Long bid){
         this.content = content;
         this.title = title;
         this.member = member;
         this.date = date;
         this.bid= bid;
     }
+
 
 }

@@ -7,8 +7,10 @@ import jejunu.portal.calenboard.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -22,8 +24,8 @@ public class BoardController {
     private final BoardRepository boardRepository;
 
     @PostMapping("/post")
-    public Long create(@RequestBody BoardDTO requestDto, HttpServletRequest request){
-        return boardService.create(requestDto, request);
+    public Long create(@ModelAttribute BoardDTO boardDTO, HttpServletRequest request, @RequestParam("uploadFiles") MultipartFile[] uploadFiles) throws Exception {
+        return boardService.create(boardDTO, request, uploadFiles);
     }
 
     @PutMapping("/update")
@@ -53,5 +55,13 @@ public class BoardController {
         return boardService.findByDate(date);
     }
 
+    @PostMapping("/upload")
+    public void uploadFile(MultipartFile[] uploadFiles){
+        for (MultipartFile uploadFile: uploadFiles){
+            String originName = uploadFile.getOriginalFilename();
+            String fileName = originName.substring(originName.lastIndexOf("\\"+1));
+            System.out.println("fileName: "+fileName);
+        }
+    }
 
 }

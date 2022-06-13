@@ -1,5 +1,6 @@
-package jejunu.portal.calenboard.entity;
+package jejunu.portal.calenboard.dto;
 
+import jejunu.portal.calenboard.entity.Member;
 import lombok.*;
 
 @Data
