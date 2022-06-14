@@ -11,9 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @AllArgsConstructor
 @Service
@@ -25,7 +28,24 @@ public class BoardService {
     @Transactional
     public Long create(BoardDTO boardDTO, HttpServletRequest request, MultipartFile[] uploadFiles) throws Exception {
         Member loginMem = memberService.getLoginUser(request);
-        photoService.uploadFile(uploadFiles, loginMem.getUid(), boardDTO.getDate());
+        List<String> photoName =  photoService.uploadFile(uploadFiles, loginMem.getUid(), boardDTO.getDate());
+        List<String> changeimgsrc = new ArrayList<>();
+        String content = boardDTO.getContent();
+        Pattern imgsrc = Pattern.compile("<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>");
+        Matcher matcher = imgsrc.matcher(content);
+        while(matcher.find()){
+            String src = matcher.group();
+            if(src==null || src.length() ==0) continue;
+            changeimgsrc.add(src);
+            System.out.println("change src: "+src);
+        }
+
+        for(int i=0;i<changeimgsrc.size();i++){
+            content = content.replace(changeimgsrc.get(i), "<img src=\""+photoName.get(i)+"\">");
+            System.out.println("changeimgsrc: "+changeimgsrc.get(i)+", photoName: "+photoName.get(i));
+        }
+        boardDTO.setContent(content);
+        System.out.println(content);
         return boardRepository.save(boardDTO.toEntity(loginMem)).getBid();
     }
 

@@ -7,11 +7,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,7 +24,8 @@ public class PhotoService {
     @Value("${org.portal.upload.path}")
     private String uploadPath;
 
-    public void uploadFile(MultipartFile[] uploadFiles, Long uid, String date) {
+    public List<String> uploadFile(MultipartFile[] uploadFiles, Long uid, String date) {
+        List<String> resultPath = new ArrayList<>();
         for (MultipartFile uploadFile : uploadFiles) {
             if (!uploadFile.getContentType().startsWith("image")) {
                 break;
@@ -30,12 +34,11 @@ public class PhotoService {
             if (ObjectUtils.isEmpty(uploadFile.getContentType())) break;
 
             String folderPath = makeFolder(uid.toString() + "/" + date);
-            String originName = uploadFile.getOriginalFilename();
+            String originName =  uploadFile.getOriginalFilename();
             String saveName = UUID.randomUUID().toString().replaceAll("-", "") + originName;
-            PhotoDTO photoDTO = PhotoDTO.builder().originName(originName)
-                    .filePath(saveName).fileSize(uploadFile.getSize()).build();
 
-            Path savePath = Paths.get(saveName);
+            resultPath.add("http://localhost:8082/static/photo/"+ uid.toString()+"/"+date+"/"+ saveName);
+
             File saveFile = new File(folderPath, saveName);
             try {
                 uploadFile.transferTo(saveFile);
@@ -43,23 +46,26 @@ public class PhotoService {
                 e.printStackTrace();
             }
         }
-
+        return resultPath;
     }
 
     public boolean deleteFile(Long uid, String date) {
         File dir = new File(uploadPath +"/"+uid.toString() + "/" + date);
         File[] photolist = dir.listFiles();
         boolean result = false;
-        for (File exphoto : photolist) {
-            if (exphoto.delete()) result = true;
-            else {
-                result = false;
-                break;
+        if(photolist!=null){
+            for (File exphoto : photolist) {
+                if (exphoto.delete()) result = true;
+                else {
+                    result = false;
+                    break;
+                }
+            }
+            if (result) {
+                result = dir.delete();
             }
         }
-        if (result) {
-            result = dir.delete();
-        }
+
         return result;
     }
 
@@ -81,6 +87,5 @@ public class PhotoService {
         if (!uploadPathFolder.exists()) uploadPathFolder.mkdirs();
         return path;
     }
-
 
 }
