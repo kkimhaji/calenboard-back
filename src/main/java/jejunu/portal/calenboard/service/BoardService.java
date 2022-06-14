@@ -63,5 +63,13 @@ public class BoardService {
         return result.isPresent();
     }
 
+    public Long delete(Long bid){
+        Board b = boardRepository.findById(bid).get();
+        Long uid = b.getMember().getUid();
+        String date = b.getDate();
+        photoService.deleteFile(uid, date);
+        boardRepository.delete(b);
+        return bid;
+    }
 
 }

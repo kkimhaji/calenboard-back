@@ -47,8 +47,7 @@ public class BoardController {
 
     @DeleteMapping("/delete/{bid}")
     public Long delete(@PathVariable Long bid){
-        boardRepository.deleteById(bid);
-        return bid;
+        return boardService.delete(bid);
     }
 
     @GetMapping("/getbydate")
