@@ -24,7 +24,7 @@ public class Board {
 //    @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
 //    private LocalDate date;
     private String date;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private Member member;
     @Column(nullable = false)

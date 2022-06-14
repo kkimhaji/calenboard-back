@@ -3,6 +3,7 @@ package jejunu.portal.calenboard.service;
 import jejunu.portal.calenboard.dto.BoardDTO;
 import jejunu.portal.calenboard.entity.Board;
 import jejunu.portal.calenboard.entity.Member;
+import jejunu.portal.calenboard.model.BoardWithPhoto;
 import jejunu.portal.calenboard.repository.BoardRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 @AllArgsConstructor
 @Service
@@ -27,11 +29,12 @@ public class BoardService {
         return boardRepository.save(boardDTO.toEntity(loginMem)).getBid();
     }
 
-    public Long update(BoardDTO boardDTO, HttpServletRequest request){
+    public Long update(BoardDTO boardDTO, HttpServletRequest request, MultipartFile[] uploadFiles){
         Long bid = boardDTO.getBid();
         Member loginMem = memberService.getLoginUser(request);
         Board board = boardRepository.findById(bid)
                 .orElseThrow(()-> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
+        photoService.updateFile(uploadFiles, loginMem.getUid(), board.getDate());
         return boardRepository.save(boardDTO.toEntity(loginMem)).getBid();
     }
 
@@ -41,8 +44,13 @@ public class BoardService {
         return result;
     }
 
-    public Optional<Board> get(Long bid){
-        return boardRepository.findById(bid);
+    public BoardWithPhoto get(String nowDate, HttpServletRequest request){
+        Member loginM = memberService.getLoginUser(request);
+        Long uid = loginM.getUid();
+        Optional<Board> b = boardRepository.findByDateAndMember(nowDate,loginM);
+        String[] result = photoService.getlist(uid, b.get().getDate());
+        BoardWithPhoto bwp = BoardWithPhoto.builder().board(b).photolist(result).build();
+        return bwp;
     }
 
     public List<Board> getlistAll(HttpServletRequest request){

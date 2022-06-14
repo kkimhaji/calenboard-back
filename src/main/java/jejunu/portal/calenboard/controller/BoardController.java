@@ -2,6 +2,7 @@ package jejunu.portal.calenboard.controller;
 
 import jejunu.portal.calenboard.dto.BoardDTO;
 import jejunu.portal.calenboard.entity.Board;
+import jejunu.portal.calenboard.model.BoardWithPhoto;
 import jejunu.portal.calenboard.repository.BoardRepository;
 import jejunu.portal.calenboard.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +30,8 @@ public class BoardController {
     }
 
     @PutMapping("/update")
-    public Long updateBoard(@RequestBody BoardDTO boardDto, HttpServletRequest request){
-        return boardService.update(boardDto, request);
+    public Long updateBoard(@ModelAttribute BoardDTO boardDto, HttpServletRequest request, @RequestParam("uploadFiles") MultipartFile[] uploadFiles){
+        return boardService.update(boardDto, request, uploadFiles);
     }
 
     @GetMapping("getList")
@@ -38,10 +39,10 @@ public class BoardController {
         return boardService.getlistAll(request);
     }
 
-    @GetMapping("get/{bid}")
-    public Optional<Board> get(@PathVariable Long bid){
-        return boardService.get(bid);
-    }
+//    @GetMapping("get/{bid}")
+//    public BoardWithPhoto get(@PathVariable Long bid, HttpServletRequest request){
+//        return boardService.get(bid, request);
+//    }
 
 
     @DeleteMapping("/delete/{bid}")
@@ -51,8 +52,8 @@ public class BoardController {
     }
 
     @GetMapping("/getbydate")
-    public Optional<Board> getByDate(@RequestParam String nowDate, HttpServletRequest request){
-        return boardService.findByDate(nowDate, request);
+    public BoardWithPhoto getByDate(@RequestParam String nowDate, HttpServletRequest request){
+        return boardService.get(nowDate, request);
     }
 
     @PostMapping("/upload")
