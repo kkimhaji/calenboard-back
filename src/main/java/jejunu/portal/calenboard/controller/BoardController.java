@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -30,7 +32,7 @@ public class BoardController {
     }
 
     @PutMapping("/update")
-    public Long updateBoard(@ModelAttribute BoardDTO boardDto, HttpServletRequest request, @RequestParam("uploadFiles") MultipartFile[] uploadFiles){
+    public Long updateBoard(@ModelAttribute BoardDTO boardDto, HttpServletRequest request, @RequestParam("uploadFiles") MultipartFile[] uploadFiles) throws FileNotFoundException {
         return boardService.update(boardDto, request, uploadFiles);
     }
 
@@ -69,4 +71,8 @@ public class BoardController {
         return boardService.postexist(nowDate, request);
     }
 
+    @GetMapping("/getMonthly")
+    public Map<String, String> getPhotoMonthly(@RequestParam String nowYM, HttpServletRequest request){
+        return boardService.getThumnailsMonthly(request, nowYM);
+    }
 }

@@ -14,4 +14,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     Optional<Board> findByDateAndMember(String date, Member member);
     List<Board> findAllByMember(Member member);
+
 }

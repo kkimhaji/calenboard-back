@@ -7,10 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -24,7 +21,7 @@ public class PhotoService {
     @Value("${org.portal.upload.path}")
     private String uploadPath;
 
-    public List<String> uploadFile(MultipartFile[] uploadFiles, Long uid, String date) {
+    public List<String> uploadFile(MultipartFile[] uploadFiles, Long uid, String date) throws FileNotFoundException {
         List<String> resultPath = new ArrayList<>();
         for (MultipartFile uploadFile : uploadFiles) {
             if (!uploadFile.getContentType().startsWith("image")) {
@@ -34,14 +31,15 @@ public class PhotoService {
             if (ObjectUtils.isEmpty(uploadFile.getContentType())) break;
 
             String folderPath = makeFolder(uid.toString() + "/" + date);
-            String originName =  uploadFile.getOriginalFilename();
+            String originName = uploadFile.getOriginalFilename();
             String saveName = UUID.randomUUID().toString().replaceAll("-", "") + originName;
 
-            resultPath.add("http://localhost:8082/static/photo/"+ uid.toString()+"/"+date+"/"+ saveName);
+            resultPath.add("http://localhost:8082/static/photo/" + uid.toString() + "/" + date + "/" + saveName);
 
             File saveFile = new File(folderPath, saveName);
             try {
                 uploadFile.transferTo(saveFile);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -50,10 +48,10 @@ public class PhotoService {
     }
 
     public boolean deleteFile(Long uid, String date) {
-        File dir = new File(uploadPath +"/"+uid.toString() + "/" + date);
+        File dir = new File(uploadPath + "/" + uid.toString() + "/" + date);
         File[] photolist = dir.listFiles();
         boolean result = false;
-        if(photolist!=null){
+        if (photolist != null) {
             for (File exphoto : photolist) {
                 if (exphoto.delete()) result = true;
                 else {
@@ -69,17 +67,16 @@ public class PhotoService {
         return result;
     }
 
-    public void updateFile(MultipartFile[] uploadFiles, Long uid, String date) {
+    public void updateFile(MultipartFile[] uploadFiles, Long uid, String date) throws FileNotFoundException {
         boolean r = deleteFile(uid, date);
         if (r) {
             uploadFile(uploadFiles, uid, date);
         }
     }
 
-    public String[] getlist(Long uid, String date){
-        File dir = new File(uploadPath +"/"+ uid.toString() + "/" + date+"/");
-        String[] photolist =dir.list();
-        return photolist;
+    public String[] getlist(Long uid, String date) {
+        File dir = new File(uploadPath + "/" + uid.toString() + "/" + date + "/");
+        return dir.list();
     }
 
     private String makeFolder(String path) {
