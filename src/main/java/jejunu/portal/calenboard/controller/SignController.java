@@ -25,7 +25,6 @@ public class SignController {
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @PostMapping("/signin")
     public SingleResult<String> signin(@RequestParam String email, @RequestParam String password) throws FailedLoginException {

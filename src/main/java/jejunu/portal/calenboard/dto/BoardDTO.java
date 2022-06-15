@@ -2,10 +2,10 @@ package jejunu.portal.calenboard.dto;
 
 import jejunu.portal.calenboard.entity.Board;
 import jejunu.portal.calenboard.entity.Member;
-import jejunu.portal.calenboard.entity.Photo;
 import lombok.*;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.OneToMany;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,8 +17,11 @@ import java.util.List;
 @NoArgsConstructor
 public class BoardDTO {
     private Long bid;
+    @Column(nullable = false)
     private String title;
+    @Column(nullable = false)
     private String content;
+    @Column(nullable = false)
     private String date;
 //    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
 //    private List<Photo> photo = new ArrayList<>();

@@ -1,6 +1,5 @@
 package jejunu.portal.calenboard.service;
 
-import jejunu.portal.calenboard.dto.PhotoDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +31,12 @@ public class PhotoService {
 
             String folderPath = makeFolder(uid.toString() + "/" + date);
             String originName = uploadFile.getOriginalFilename();
+            assert originName != null;
+            String ext = originName.split("\\.")[1];
+            if(ext.equals("jpeg")){
+                ext = "jpg";
+                originName = originName.split("\\.")[0]+ext;
+            }
             String saveName = UUID.randomUUID().toString().replaceAll("-", "") + originName;
 
             resultPath.add("http://localhost:8082/static/photo/" + uid.toString() + "/" + date + "/" + saveName);
